@@ -3,16 +3,22 @@ import HomePage from "./pages/HomePage/HomePage"
 import SeatsPage from "./pages/SeatsPage/SeatsPage"
 import SessionsPage from "./pages/SessionsPage/SessionsPage"
 import SuccessPage from "./pages/SuccessPage/SuccessPage"
+import GlobalStyle from "./style/GlobalStyle.js"
+import ResetStyle from "./style/ResetStyle.js"
+import Routes from "./Routes.jsx"
 
 export default function App() {
     return (
         <>
+           <ResetStyle/>
+           <GlobalStyle/>
            <NavContainer>CINEFLEX</NavContainer>
 
-            <HomePage />
-            {/* <SeatsPage /> */}
-            {/* <SessionsPage /> */}
-            {/* <SuccessPage /> */}
+           {/* <HomePage /> */}
+           {/* <SeatsPage /> */}
+           {/* <SessionsPage /> */}
+           {/* <SuccessPage /> */}
+           <Routes />
         </>
     )
 }
