@@ -1,17 +1,15 @@
 import styled from "styled-components"
 
 export default function SeatsPage() {
-
+    let assentos =[1, 2, 3, 4, 5]
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                <SeatItem>01</SeatItem>
-                <SeatItem>02</SeatItem>
-                <SeatItem>03</SeatItem>
-                <SeatItem>04</SeatItem>
-                <SeatItem>05</SeatItem>
+                {assentos.map((assento)=>
+                    <SeatItem>{assento}</SeatItem>
+                )}
             </SeatsContainer>
 
             <CaptionContainer>

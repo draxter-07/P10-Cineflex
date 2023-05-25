@@ -1,24 +1,26 @@
 import styled from "styled-components"
-import HomePage from "./pages/HomePage/HomePage"
+import HomePage from "./pages/HomePage/HomePage.jsx"
 import SeatsPage from "./pages/SeatsPage/SeatsPage"
 import SessionsPage from "./pages/SessionsPage/SessionsPage"
 import SuccessPage from "./pages/SuccessPage/SuccessPage"
 import GlobalStyle from "./style/GlobalStyle.js"
 import ResetStyle from "./style/ResetStyle.js"
-import Routes from "./Routes.jsx"
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
 
 export default function App() {
     return (
         <>
-           <ResetStyle/>
-           <GlobalStyle/>
-           <NavContainer>CINEFLEX</NavContainer>
-
-           {/* <HomePage /> */}
-           {/* <SeatsPage /> */}
-           {/* <SessionsPage /> */}
-           {/* <SuccessPage /> */}
-           <Routes />
+            <ResetStyle/>
+            <GlobalStyle/>
+            <NavContainer>CINEFLEX</NavContainer>
+            <BrowserRouter>
+                <Routes>
+                    <Route element={<HomePage />} path="/"/>
+                    <Route element={<SeatsPage />} path="/assentos"/>
+                    <Route element={<SessionsPage />} path="/sessoes"/>
+                    <Route element={<SuccessPage />} path="/success"/>
+                </Routes>
+            </BrowserRouter>
         </>
     )
 }

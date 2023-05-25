@@ -1,42 +1,31 @@
 import styled from "styled-components"
 
 export default function SessionsPage() {
-
+    let data_sessoes = [['Sexta - 03/03/2023', ['14:00', '15:00']], ['Sexta - 03/03/2023', ['14:00', '15:00']], ['Sexta - 03/03/2023', ['14:00', '15:00']]]
+    let movie_poster = "https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg";
+    let movie_name = 'Tudo em todo lugar ao mesmo tempo';
     return (
         <PageContainer>
             Selecione o horário
             <div>
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
-
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
-
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
+                {data_sessoes.map((data)=>
+                    <SessionContainer>
+                        {data[0]}
+                        <ButtonsContainer>
+                        {data[1].map((hora)=>
+                            <button>{hora}</button>
+                        )}
+                        </ButtonsContainer>
+                    </SessionContainer>
+                )}
             </div>
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={movie_poster} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
+                    <p>{movie_name}</p>
                 </div>
             </FooterContainer>
 
