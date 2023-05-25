@@ -16,9 +16,9 @@ export default function App() {
             <BrowserRouter>
                 <Routes>
                     <Route element={<HomePage />} path="/"/>
-                    <Route element={<SeatsPage />} path="/assentos"/>
-                    <Route element={<SessionsPage />} path="/sessoes"/>
-                    <Route element={<SuccessPage />} path="/success"/>
+                    <Route element={<SeatsPage />} path="/assentos/:idFilme"/>
+                    <Route element={<SessionsPage />} path="/sessoes/:idFilme"/>
+                    <Route element={<SuccessPage />} path="/success/:idFilme"/>
                 </Routes>
             </BrowserRouter>
         </>

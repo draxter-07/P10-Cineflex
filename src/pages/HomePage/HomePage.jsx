@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import axios from 'axios'
-import { React, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
+import { Link } from 'react-router-dom'
 
 export default function HomePage() {
     let [filmes, setFilmes] = useState([]);
@@ -38,17 +39,17 @@ export default function HomePage() {
     `
     useEffect(() => {
 		const request = axios.get("https://mock-api.driven.com.br/api/v8/cineflex/movies");
-		request.then(resposta => {
-            setFilmes(resposta.data.items);
-		});
+		request.then(resposta =>
+            setFilmes(resposta.data)
+		);
     }, []);
     return (
         <PageContainer>
             Selecione o filme
             <ListContainer>
-                {filmes.map(filme=>
+                {filmes.map((filme)=>
                     <MovieContainer>
-                        <img src={filme.posterURL} alt="poster"/>
+                        <Link to={"/sessoes/" + filme.id}><img src={filme.posterURL} alt="poster"/></Link>
                     </MovieContainer>
                 )}
             </ListContainer>

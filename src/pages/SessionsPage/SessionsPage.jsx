@@ -1,9 +1,19 @@
 import styled from "styled-components"
+import { useParams, Link } from "react-router-dom"
+import axios from 'axios'
+import { useState, useEffect } from 'react'
 
 export default function SessionsPage() {
+    let [sessoes, setSessoes] = useState([]);
     let data_sessoes = [['Sexta - 03/03/2023', ['14:00', '15:00']], ['Sexta - 03/03/2023', ['14:00', '15:00']], ['Sexta - 03/03/2023', ['14:00', '15:00']]]
-    let movie_poster = "https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg";
-    let movie_name = 'Tudo em todo lugar ao mesmo tempo';
+    let filmeid = useParams().idFilme;
+    useEffect(() => {
+		const request = axios.get("https://mock-api.driven.com.br/api/v8/cineflex/movies/" + filmeid + "/showtimes");
+		request.then(resposta =>
+            setSessoes(resposta.data)
+		);
+    }, []);
+    console.log(sessoes);
     return (
         <PageContainer>
             Selecione o horário
@@ -13,7 +23,7 @@ export default function SessionsPage() {
                         {data[0]}
                         <ButtonsContainer>
                         {data[1].map((hora)=>
-                            <button>{hora}</button>
+                            <Link><button>{hora}</button></Link>
                         )}
                         </ButtonsContainer>
                     </SessionContainer>
@@ -22,10 +32,10 @@ export default function SessionsPage() {
 
             <FooterContainer>
                 <div>
-                    <img src={movie_poster} alt="poster" />
+                    <img src={sessoes.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>{movie_name}</p>
+                    <p>{sessoes.title}</p>
                 </div>
             </FooterContainer>
 
