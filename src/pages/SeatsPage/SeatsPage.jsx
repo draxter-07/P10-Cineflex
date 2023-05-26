@@ -4,7 +4,7 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 
 export default function SeatsPage() {
-    let [assentos, setAssentos] = useState([]);
+    let [assentos, setAssentos] = useState(null);
     let filmeid = useParams().idFilme;
     useEffect(() => {
 		const request = axios.get('https://mock-api.driven.com.br/api/v8/cineflex/showtimes/' + filmeid + '/seats');
@@ -12,7 +12,9 @@ export default function SeatsPage() {
             setAssentos(resposta.data)
 		);
     }, []);
-    console.log(assentos);
+    if(assentos === null) {
+		return null;
+	}
     return (
         <PageContainer>
             Selecione o(s) assento(s)
