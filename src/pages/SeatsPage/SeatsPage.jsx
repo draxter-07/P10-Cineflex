@@ -6,40 +6,91 @@ import { useState, useEffect } from 'react'
 export default function SeatsPage() {
     let [assentos, setAssentos] = useState(null);
     let filmeid = useParams().idFilme;
+    let selected_color = 'rgb(255, 150, 50)';
+    let dispon_color = 'rgb(0, 255, 0)';
+    let indisp_color = 'rgb(255, 0, 0)';
+    let colors = [[selected_color, 'Selecionado'], [dispon_color, 'Disponível'], [indisp_color, 'Indisponível']]
     useEffect(() => {
 		const request = axios.get('https://mock-api.driven.com.br/api/v8/cineflex/showtimes/' + filmeid + '/seats');
 		request.then(resposta =>
-            setAssentos(resposta.data)
+            setAssentos([resposta.data, []])
 		);
     }, []);
-    if(assentos === null) {
+    function Assento(atr){
+        let backcolor;
+        if (atr.back == false){
+            backcolor = indisp_color;
+        }
+        else if (atr.back == 'sel'){
+            backcolor = selected_color;
+        }
+        else{
+            backcolor = dispon_color;
+        }
+        const SeatItem = styled.div`
+            border: 1px solid blue;
+            background-color: ${backcolor};
+            height: 25px;
+            width: 25px;
+            border-radius: 25px;
+            font-family: 'Roboto';
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px 3px;`
+        return(
+            <SeatItem id={atr.id} selected={backcolor} onClick={(e) => clic(e)} data-test="seat">{atr.value}</SeatItem>
+        )
+    }
+    function Legenda(atr){
+        const CaptionCircle = styled.div`
+            border: 1px solid blue;
+            background-color: ${atr.back};
+            height: 25px;
+            width: 25px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px 3px;`
+        const CaptionItem = styled.div`
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+        `
+        return(
+            <CaptionItem>
+                <CaptionCircle/>
+                {atr.name}
+            </CaptionItem>
+        )
+
+    }
+    function clic(e){
+        if (e.target.selected == dispon_color){
+            assentos[1].push(e.target.id);
+            console.log(assentos[1]);
+            setAssentos(assentos);
+        }
+    };
+    if(assentos == null) {
 		return null;
-	}
+    };
     return (
         <PageContainer>
             Selecione o(s) assento(s)
-
             <SeatsContainer>
-                {assentos.seats.map((assento)=>
-                    <SeatItem data-test="seat">{assento.name}</SeatItem>
+                {assentos[0].seats.map((assento)=>
+                    <Assento id={assento.id} back={assento.isAvailable} value={assento.name}/>
                 )}
             </SeatsContainer>
-
             <CaptionContainer>
-                <CaptionItem>
-                    <CaptionCircle />
-                    Selecionado
-                </CaptionItem>
-                <CaptionItem>
-                    <CaptionCircle />
-                    Disponível
-                </CaptionItem>
-                <CaptionItem>
-                    <CaptionCircle />
-                    Indisponível
-                </CaptionItem>
+                {colors.map((color)=>
+                    <Legenda back={color[0]} name={color[1]}/>
+                )}
             </CaptionContainer>
-
             <FormContainer>
                 Nome do Comprador:
                 <input placeholder="Digite seu nome..." data-test="client-name"/>
@@ -49,17 +100,15 @@ export default function SeatsPage() {
 
                 <button data-test="book-seat-btn">Reservar Assento(s)</button>
             </FormContainer>
-
             <FooterContainer data-test="footer">
                 <div>
-                    <img src={assentos.movie.posterURL} alt="poster" />
+                    <img src={assentos[0].movie.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>{assentos.movie.title}</p>
-                    <p>{assentos.day.weekday + ' - ' + assentos.day.date}</p>
+                    <p>{assentos[0].movie.title}</p>
+                    <p>{assentos[0].day.weekday + ' - ' + assentos[0].day.date}</p>
                 </div>
             </FooterContainer>
-
         </PageContainer>
     )
 }
@@ -105,36 +154,6 @@ const CaptionContainer = styled.div`
     width: 300px;
     justify-content: space-between;
     margin: 20px;
-`
-const CaptionCircle = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
-    height: 25px;
-    width: 25px;
-    border-radius: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 5px 3px;
-`
-const CaptionItem = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 12px;
-`
-const SeatItem = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
-    height: 25px;
-    width: 25px;
-    border-radius: 25px;
-    font-family: 'Roboto';
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 5px 3px;
 `
 const FooterContainer = styled.div`
     width: 100%;
