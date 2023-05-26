@@ -17,18 +17,18 @@ export default function SessionsPage() {
             Selecione o horário
             <div>
                 {sessoes[1].map((data)=>
-                    <SessionContainer>
+                    <SessionContainer data-test="movie-day">
                         {data.weekday + ' - ' + data.date}
                         <ButtonsContainer>
                         {data.showtimes.map((hora)=>
-                            <Link to={'/assentos/' + hora.id}><button>{hora.name}</button></Link>
+                            <Link to={'/assentos/' + hora.id} data-test="showtime"><button>{hora.name}</button></Link>
                         )}
                         </ButtonsContainer>
                     </SessionContainer>
                 )}
             </div>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={sessoes[0].posterURL} alt="poster" />
                 </div>

@@ -4,7 +4,6 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 
 export default function SeatsPage() {
-    let assent = [1, 2, 3, 4, 5];
     let [assentos, setAssentos] = useState([]);
     let filmeid = useParams().idFilme;
     useEffect(() => {
@@ -13,17 +12,14 @@ export default function SeatsPage() {
             setAssentos(resposta.data)
 		);
     }, []);
-    let filme_poster = assentos.movie.posterURL
-    let filme_nome = assentos.movie.title;
-    let filme_hora = assentos.day.weekday + ' - ' + assentos.day.date
-    console.log(assentos.seats)
+    console.log(assentos);
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
                 {assentos.seats.map((assento)=>
-                    <SeatItem>{assento.name}</SeatItem>
+                    <SeatItem data-test="seat">{assento.name}</SeatItem>
                 )}
             </SeatsContainer>
 
@@ -44,21 +40,21 @@ export default function SeatsPage() {
 
             <FormContainer>
                 Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+                <input placeholder="Digite seu nome..." data-test="client-name"/>
 
                 CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
+                <input placeholder="Digite seu CPF..." data-test="client-cpf" />
 
-                <button>Reservar Assento(s)</button>
+                <button data-test="book-seat-btn">Reservar Assento(s)</button>
             </FormContainer>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
-                    <img src={filme_poster} alt="poster" />
+                    <img src={assentos.movie.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>{filme_nome}</p>
-                    <p>{filme_hora}</p>
+                    <p>{assentos.movie.title}</p>
+                    <p>{assentos.day.weekday + ' - ' + assentos.day.date}</p>
                 </div>
             </FooterContainer>
 
