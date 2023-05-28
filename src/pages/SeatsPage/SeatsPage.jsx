@@ -116,6 +116,9 @@ export default function SeatsPage() {
             }
             setSelect(new_select);
         }
+        else{
+            alert('Esse assento não está disponível');
+        }
     };
     function reservar(event){
         event.preventDefault();
