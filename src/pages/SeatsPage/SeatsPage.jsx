@@ -99,6 +99,7 @@ export default function SeatsPage() {
             let new_select = [...select];
             new_select.push(e.target.id);
             setSelect(new_select);
+            console.log(select);
         }
         else if (e.target.selected == selected_color){
             let new_ass = {...assentos};
