@@ -1,12 +1,14 @@
 import styled from "styled-components"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 export default function SuccessPage() {
     let movie_name = 'Tudo em todo lugar ao mesmo tempo';
     let data = '03/03/2023 - 14:00';
-    let assentos = ['01', '02', '03'];
-    let nome_comprador = 'Letícia Chijo';
-    let cpf_comprador = '123.456.789-10';
+    let assentos = [1, 2, 3];
+    let nome_comprador = useParams().user;
+    let cpf_comprador = useParams().cpf;
+    let navigate = useNavigate();
+    console.log(useParams().select)
     return (
         <PageContainer>
             <h1>Pedido feito <br /> com sucesso!</h1>
@@ -30,7 +32,7 @@ export default function SuccessPage() {
                 <p>CPF: {cpf_comprador}</p>
             </TextContainer>
 
-            <Link to="/">Voltar para Home</Link>
+            <button onClick={() => navigate('/')}>Voltar para Home</button>
         </PageContainer>
     )
 }

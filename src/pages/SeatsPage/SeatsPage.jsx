@@ -14,6 +14,7 @@ export default function SeatsPage() {
     let dispon_color = '#C3CFD9';
     let indisp_color = '#FBE192';
     let colors = [[selected_color, 'Selecionado'], [dispon_color, 'Disponível'], [indisp_color, 'Indisponível']]
+    let navegate = useNavigate();
     useEffect(() => {
 		const request = axios.get('https://mock-api.driven.com.br/api/v8/cineflex/showtimes/' + filmeid + '/seats');
 		request.then(resposta =>
@@ -118,8 +119,9 @@ export default function SeatsPage() {
     };
     function reservar(event){
         event.preventDefault();
-        let request = axios.post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', {ids: {select}, name: {user}, cpf: {cpf}});
-        request.then(() => console.log('oi'));
+        let obj = {ids: select, name: user, cpf: cpf};
+        let request = axios.post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', obj);
+        request.then(() => navegate('/success/' + filmeid + '/' + user + '/' + cpf + '/[' + select + ']'));
     }
     if(assentos == null) {
 		return null;
