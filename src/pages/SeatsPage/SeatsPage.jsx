@@ -4,31 +4,39 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 
 export default function SeatsPage() {
+    let name;
+    let cpf;
     let [assentos, setAssentos] = useState(null);
+    let [select, setSelect] = useState([]);
+    let [user, setUser] = useState("");
     let filmeid = useParams().idFilme;
-    let selected_color = 'rgb(255, 150, 50)';
-    let dispon_color = 'rgb(0, 255, 0)';
-    let indisp_color = 'rgb(255, 0, 0)';
+    let selected_color = '#1AAE9E';
+    let dispon_color = '#C3CFD9';
+    let indisp_color = '#FBE192';
     let colors = [[selected_color, 'Selecionado'], [dispon_color, 'Disponível'], [indisp_color, 'Indisponível']]
     useEffect(() => {
 		const request = axios.get('https://mock-api.driven.com.br/api/v8/cineflex/showtimes/' + filmeid + '/seats');
 		request.then(resposta =>
-            setAssentos([resposta.data, []])
+            setAssentos(resposta.data)
 		);
     }, []);
     function Assento(atr){
         let backcolor;
+        let bord;
         if (atr.back == false){
             backcolor = indisp_color;
+            bord = '#F7C52B';
         }
         else if (atr.back == 'sel'){
             backcolor = selected_color;
+            bord = '#0E7D71';
         }
         else{
             backcolor = dispon_color;
+            bord = '#808F9D';
         }
         const SeatItem = styled.div`
-            border: 1px solid blue;
+            border: 1px solid ${bord};
             background-color: ${backcolor};
             height: 25px;
             width: 25px;
@@ -44,8 +52,18 @@ export default function SeatsPage() {
         )
     }
     function Legenda(atr){
+        let bord;
+        if (atr.back == selected_color){
+            bord = '#0E7D71';
+        }
+        else if (atr.back == dispon_color){
+            bord = '#808F9D';
+        }
+        else if (atr.back == indisp_color){
+            bord = '#F7C52B';
+        }
         const CaptionCircle = styled.div`
-            border: 1px solid blue;
+            border: 1px solid ${bord};
             background-color: ${atr.back};
             height: 25px;
             width: 25px;
@@ -70,19 +88,25 @@ export default function SeatsPage() {
     }
     function clic(e){
         if (e.target.selected == dispon_color){
-            assentos[1].push(e.target.id);
-            console.log(assentos[1]);
-            setAssentos(assentos);
+            let new_assentos = assentos;
+            new_assentos.seats[1].isAvailable = false;
+            if (new_assentos == assentos){
+                console.log('diguais');
+            }
+            else{
+                console.log('diferenes');
+            }
+            setAssentos(new_assentos);
         }
     };
     if(assentos == null) {
 		return null;
-    };
+    }
     return (
         <PageContainer>
             Selecione o(s) assento(s)
             <SeatsContainer>
-                {assentos[0].seats.map((assento)=>
+                {assentos.seats.map((assento)=>
                     <Assento id={assento.id} back={assento.isAvailable} value={assento.name}/>
                 )}
             </SeatsContainer>
@@ -93,20 +117,20 @@ export default function SeatsPage() {
             </CaptionContainer>
             <FormContainer>
                 Nome do Comprador:
-                <input placeholder="Digite seu nome..." data-test="client-name"/>
+                <input placeholder="Digite seu nome..." data-test="client-name" onChange={e => setUser(e.target.value)}/>
 
                 CPF do Comprador:
-                <input placeholder="Digite seu CPF..." data-test="client-cpf" />
+                <input placeholder="Digite seu CPF..." data-test="client-cpf" value={cpf}/>
 
-                <button data-test="book-seat-btn">Reservar Assento(s)</button>
+                <button to={'/success/' + filmeid + '/' + name + '/' + cpf} data-test="book-seat-btn">Reservar Assento(s)</button>
             </FormContainer>
             <FooterContainer data-test="footer">
                 <div>
-                    <img src={assentos[0].movie.posterURL} alt="poster" />
+                    <img src={assentos.movie.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>{assentos[0].movie.title}</p>
-                    <p>{assentos[0].day.weekday + ' - ' + assentos[0].day.date}</p>
+                    <p>{assentos.movie.title}</p>
+                    <p>{assentos.day.weekday + ' - ' + assentos.day.date}</p>
                 </div>
             </FooterContainer>
         </PageContainer>
