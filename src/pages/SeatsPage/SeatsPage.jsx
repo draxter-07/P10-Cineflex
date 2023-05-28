@@ -144,10 +144,10 @@ export default function SeatsPage() {
             </CaptionContainer>
             <FormContainer onSubmit={event => reservar(event)}>
                 Nome do Comprador:
-                <input placeholder="Digite seu nome..." data-test="client-name" onChange={e => setUser(e.target.value)} required/>
+                <input placeholder="Digite seu nome..." data-test="client-name" onChange={e => setUser(e.target.value)}/>
 
                 CPF do Comprador:
-                <input placeholder="Digite seu CPF..." data-test="client-cpf" onChange={e => setCpf(e.target.value)} required/>
+                <input placeholder="Digite seu CPF..." data-test="client-cpf" onChange={e => setCpf(e.target.value)}/>
 
                 <button type='submit' data-test="book-seat-btn">Reservar Assento(s)</button>
             </FormContainer>
@@ -157,7 +157,7 @@ export default function SeatsPage() {
                 </div>
                 <div>
                     <p>{assentos.movie.title}</p>
-                    <p>{assentos.day.weekday + ' - ' + assentos.day.date}</p>
+                    <p>{assentos.day.weekday + ' - ' + assentos.day.date + ' - ' + assentos.name}</p>
                 </div>
             </FooterContainer>
         </PageContainer>
