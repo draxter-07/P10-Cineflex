@@ -1,14 +1,14 @@
 import styled from "styled-components"
-import { useParams, Link } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 
 export default function SeatsPage() {
-    let name;
-    let cpf;
+    axios.defaults.headers.common['Authorization'] = 'Ig05OI8F18Lp90ZDISfjWMt8';
     let [assentos, setAssentos] = useState(null);
     let [select, setSelect] = useState([]);
     let [user, setUser] = useState("");
+    let [cpf, setCpf] = useState("");
     let filmeid = useParams().idFilme;
     let selected_color = '#1AAE9E';
     let dispon_color = '#C3CFD9';
@@ -88,17 +88,39 @@ export default function SeatsPage() {
     }
     function clic(e){
         if (e.target.selected == dispon_color){
-            let new_assentos = assentos;
-            new_assentos.seats[1].isAvailable = false;
-            if (new_assentos == assentos){
-                console.log('diguais');
+            let new_ass = {...assentos};
+            for (let a = 0; a < new_ass.seats.length; a++){
+                if (new_ass.seats[a].id == e.target.id){
+                    new_ass.seats[a].isAvailable = 'sel';
+                }
             }
-            else{
-                console.log('diferenes');
+            setAssentos(new_ass);
+            let new_select = [...select];
+            new_select.push(e.target.id);
+            setSelect(new_select);
+        }
+        else if (e.target.selected == selected_color){
+            let new_ass = {...assentos};
+            for (let a = 0; a < new_ass.seats.length; a++){
+                if (new_ass.seats[a].id == e.target.id){
+                    new_ass.seats[a].isAvailable = true;
+                }
             }
-            setAssentos(new_assentos);
+            setAssentos(new_ass);
+            let new_select = [];
+            for (let a = 0; a < select.length; a++){
+                if (select[a] != e.target.id){
+                    new_select.push(a)
+                }
+            }
+            setSelect(new_select);
         }
     };
+    function reservar(event){
+        event.preventDefault();
+        let request = axios.post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', {ids: {select}, name: {user}, cpf: {cpf}});
+        request.then(() => console.log('oi'));
+    }
     if(assentos == null) {
 		return null;
     }
@@ -115,14 +137,14 @@ export default function SeatsPage() {
                     <Legenda back={color[0]} name={color[1]}/>
                 )}
             </CaptionContainer>
-            <FormContainer>
+            <FormContainer onSubmit={event => reservar(event)}>
                 Nome do Comprador:
-                <input placeholder="Digite seu nome..." data-test="client-name" onChange={e => setUser(e.target.value)}/>
+                <input placeholder="Digite seu nome..." data-test="client-name" onChange={e => setUser(e.target.value)} required/>
 
                 CPF do Comprador:
-                <input placeholder="Digite seu CPF..." data-test="client-cpf" value={cpf}/>
+                <input placeholder="Digite seu CPF..." data-test="client-cpf" onChange={e => setCpf(e.target.value)} required/>
 
-                <button to={'/success/' + filmeid + '/' + name + '/' + cpf} data-test="book-seat-btn">Reservar Assento(s)</button>
+                <button type='submit' data-test="book-seat-btn">Reservar Assento(s)</button>
             </FormContainer>
             <FooterContainer data-test="footer">
                 <div>
@@ -158,7 +180,7 @@ const SeatsContainer = styled.div`
     justify-content: center;
     margin-top: 20px;
 `
-const FormContainer = styled.div`
+const FormContainer = styled.form`
     width: calc(100vw - 40px); 
     display: flex;
     flex-direction: column;
