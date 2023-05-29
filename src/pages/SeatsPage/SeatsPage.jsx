@@ -7,6 +7,7 @@ export default function SeatsPage() {
     axios.defaults.headers.common['Authorization'] = 'Ig05OI8F18Lp90ZDISfjWMt8';
     let [assentos, setAssentos] = useState(null);
     let [select, setSelect] = useState([]);
+    let select_str = select.toString().replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '&')
     let [user, setUser] = useState("");
     let [cpf, setCpf] = useState("");
     let filmeid = useParams().idFilme;
@@ -125,7 +126,7 @@ export default function SeatsPage() {
         event.preventDefault();
         let obj = {ids: select, name: user, cpf: cpf};
         let request = axios.post('https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many', obj);
-        request.then(() => navegate('/success/' + filmeid + '/' + user + '/' + cpf + '/[' + select + ']'));
+        request.then(() => navegate('/sucesso/' + filmeid + '/' + user + '/' + cpf + '/' + select_str + '/' + assentos.movie.title + '/'  + assentos.day.date.replaceAll('/', '-') + ' - ' + assentos.name.replaceAll(':', 'h')));
     }
     if(assentos == null) {
 		return null;

@@ -2,13 +2,13 @@ import styled from "styled-components"
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 export default function SuccessPage() {
-    let movie_name = 'Tudo em todo lugar ao mesmo tempo';
-    let data = '03/03/2023 - 14:00';
-    let assentos = [1, 2, 3];
+    let movie_name = useParams().name;
+    let data = useParams().data;
+    let assentos = useParams().select.split('&');
     let nome_comprador = useParams().user;
     let cpf_comprador = useParams().cpf;
     let navigate = useNavigate();
-    console.log(useParams().select)
+    console.log(useParams().select.replaceAll('[', '').replaceAll(']', '').replaceAll(', ', '&'))
     return (
         <PageContainer>
             <h1>Pedido feito <br /> com sucesso!</h1>
